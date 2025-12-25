@@ -43,3 +43,25 @@ class LinearRegressionGD:
 
     def predict(self, X):
         return X @ self.coef_ + self.intercept_
+
+
+class Perceptron:
+
+    def __init__(self):
+        self.weights = None
+
+    def step(self , z):
+        return 1 if z > 0 else 0
+
+    def fit(self, X, y, lr=0.1, epochs=1):
+        # add bias term
+        X = np.insert(X, 0, 1, axis=1)
+        self.weights = np.ones(X.shape[1])
+
+        for _ in range(epochs):
+            for i in range(X.shape[0]):
+                j = np.random.randint(0, X.shape[0])
+                y_hat = self.step(X[j] @ self.weights)
+                self.weights = self.weights + lr * (y[j] - y_hat) * X[j]
+
+        return self.weights[0], self.weights[1:]
