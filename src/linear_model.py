@@ -1,24 +1,6 @@
 import numpy as np 
 
 # Linear Regression using OLS 
-class LinearRegression_OLS :
-
-    def __init__(self):
-        self.coef_ = None 
-        self.intercept_ = None 
-        
-        
-    def fit (self , X , y ):
-        X = np.insert(X , 0 , 1 , axis = 1 )
-
-        weights = np.linalg.inv((X.T@X))@(np.transpose(X))@y
-        self.intercept_ = weights[0]
-        self.coef_  = weights[1:]
-
-    def predict(self, X):
-        return np.dot(X,self.coef_) + self.intercept_
-        
-
 class LinearRegression :
 
     def __init__(self):
