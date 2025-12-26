@@ -96,3 +96,45 @@ class Perceptron:
                 self.weights = self.weights + lr * (y[j] - y_hat) * X[j]
 
         return self.weights[0], self.weights[1:]
+    
+
+
+    # logisticRegression using sgd
+
+class LogisticRegressionSGD:
+
+    def __init__(self, lr=0.01, epoches=10):
+        self.lr = lr
+        self.epoches = epoches
+        self.coef_ = None
+        self.intercept_ = None
+
+    def _sigmoid(self, z):
+        return 1 / (1 + np.exp(-z))
+
+    def fit(self, X, y):
+        # add bias term
+        X = np.insert(X, 0, 1, axis=1)
+        weights = np.zeros(X.shape[1])
+
+        n = X.shape[0]
+
+        for _ in range(self.epoches):
+            for _ in range(n):
+                r = np.random.randint(0, n)
+                z = X[r] @ weights
+                y_pred = self._sigmoid(z)
+                error = y[r] - y_pred
+                gradient = error * X[r]          # SGD gradient
+                weights = weights + self.lr * gradient
+
+        self.intercept_ = weights[0]
+        self.coef_ = weights[1:]
+
+    def predict(self, X):
+        preds = []
+        for x in X:
+            z = x @ self.coef_ + self.intercept_
+            p_hat = self._sigmoid(z)
+            preds.append(1 if p_hat >= 0.5 else 0)
+        return np.array(preds)
